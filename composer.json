@@ -1,0 +1,20 @@
+{
+    "name": "codeguy/ssg",
+    "description": "Static site generator",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Codeguy\\Ssg\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Josh Lockhart",
+            "email": "josh@newmediacampaigns.com"
+        }
+    ],
+    "require": {
+        "twig/twig": "^3.0"
+    }
+}
