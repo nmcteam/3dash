@@ -1,11 +1,11 @@
 {
-    "name": "codeguy/ssg",
+    "name": "nmc/ssg",
     "description": "Static site generator",
     "type": "library",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Codeguy\\Ssg\\": "src/"
+            "Nmc\\Ssg\\": "src/"
         }
     },
     "authors": [
@@ -14,7 +14,10 @@
             "email": "josh@newmediacampaigns.com"
         }
     ],
-    "require": {
+    "suggest": {
+        "twig/twig": "Enables Twig templates"
+    },
+    "require-dev": {
         "twig/twig": "^3.0"
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Codeguy\Ssg;
+namespace Nmc\Ssg;
 
 class File extends \SplFileInfo implements \ArrayAccess
 {

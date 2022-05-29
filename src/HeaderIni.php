@@ -1,16 +1,11 @@
 <?php
-namespace Codeguy\Ssg\Plugins\Headers;
+namespace Nmc\Ssg;
 
-use Codeguy\Ssg\Payload;
-use Codeguy\Ssg\File;
-use Codeguy\Ssg\FileCollection;
-use Codeguy\Ssg\Interfaces\PluginInterface;
-
-class IniHeader implements PluginInterface
+class HeaderIni implements PluginInterface
 {
-    public function handle(Payload $payload): void
+    public function handle(object $payload)
     {
-        foreach ($payload['files'] as $pathname => $file) {
+        foreach ($payload->files as $pathname => $file) {
             if ($file->getOriginalHeader() === '') {
                 continue;
             }

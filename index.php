@@ -1,14 +1,15 @@
 <?php
 require './vendor/autoload.php';
 
-use Codeguy\Ssg\Plugins\Headers\IniHeader;
-use Codeguy\Ssg\Plugins\Twig;
-use Codeguy\Ssg\Plugins\Writers\FilesystemWriter;
+use Nmc\Ssg\App;
+use Nmc\Ssg\Drafts;
+use Nmc\Ssg\FilesystemWriter;
+use Nmc\Ssg\HeaderIni;
+use Nmc\Ssg\Twig;
 
-$app = new \Codeguy\Ssg\App('./site');
-$app->add(new IniHeader());
-$app->add(new Twig([
-    'cache' => false
-]));
+$app = new App('./site');
+$app->add(new HeaderIni());
+$app->add(new Drafts());
+$app->add(new Twig());
 $app->add(new FilesystemWriter('./build'));
-$result = $app->run();
+$app->run();

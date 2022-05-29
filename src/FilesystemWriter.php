@@ -1,9 +1,5 @@
 <?php
-namespace Codeguy\Ssg\Plugins\Writers;
-
-use Codeguy\Ssg\Payload;
-use Codeguy\Ssg\File;
-use Codeguy\Ssg\Interfaces\PluginInterface;
+namespace Nmc\Ssg;
 
 class FilesystemWriter implements PluginInterface
 {
@@ -29,14 +25,13 @@ class FilesystemWriter implements PluginInterface
         }
     }
 
-    public function handle(Payload $payload): void
+    public function handle(object $payload)
     {
-        // Clean build dir
-        $this->clean($this->output_dir->getPath());
+        // @TODO: Clean build dir
     
         // Write new files
-        $root_path = $payload['site']['root']->getRealPath();
-        foreach ($payload['files'] as $pathname => $file) {
+        $root_path = $payload->files_path->getRealPath();
+        foreach ($payload->files as $pathname => $file) {
             // Validate file path
             $file_path = $file->getRealPath();
             if (stripos($file_path, $root_path) !== 0) {
@@ -68,10 +63,5 @@ class FilesystemWriter implements PluginInterface
                 throw new \Exception('Failed to change group for file: ' . $output_pathname);
             }
         }
-    }
-
-    protected function clean(string $dir): void
-    {
-        // TODO
     }
 }

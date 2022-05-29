@@ -1,15 +1,11 @@
 <?php
-namespace Codeguy\Ssg\Plugins;
-
-use Codeguy\Ssg\Payload;
-use Codeguy\Ssg\File;
-use Codeguy\Ssg\Interfaces\PluginInterface;
+namespace Nmc\Ssg;
 
 class IndexFiles implements PluginInterface
 {
-    public function handle(Payload $payload): void
+    public function handle(object $payload)
     {
-        $root_path = $payload['site']['root']->getRealPath();
+        $root_path = $payload->files_path->getRealPath();
         $directory = new \RecursiveDirectoryIterator($root_path, \FilesystemIterator::FOLLOW_SYMLINKS);
         $filter = new \RecursiveCallbackFilterIterator($directory, function ($current, $key, $iterator) {
             // Skip hidden files and directories.
@@ -17,14 +13,7 @@ class IndexFiles implements PluginInterface
                 return false;
             }
 
-            // Recurse valid directories
-            if ($current->isDir()) {
-                // Only recurse into intended subdirectories.
-                // return $current->getFilename() === 'wanted_dirname';
-                return true;
-            }
-
-            // Allow files
+            // Otherwise recurse all files and dirs
             return true;
         });
         $iterator = new \RecursiveIteratorIterator($filter);
@@ -65,7 +54,7 @@ class IndexFiles implements PluginInterface
                 $header = $file_parts[0];
                 $body = $file_parts[1];
             }
-            $payload['files'][$file_path_under_root] = new File(
+            $payload->files[$file_path_under_root] = new File(
                 $file_pathname,
                 $header,
                 $body
