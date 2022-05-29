@@ -29,20 +29,16 @@ class Twig implements PluginInterface
         }, \ARRAY_FILTER_USE_KEY);
 
         // Init Twig and render files
-        $loader = new \Twig\Loader\ArrayLoader();
-        foreach ($twig_files as $pathname => $file) {
-            $loader->setTemplate($pathname, $file->getBody());
-        }
+        $loader = new \Twig\Loader\ArrayLoader(array_map(fn($file) => $file->getBody(), $twig_files));
         $twig = new \Twig\Environment($loader, $this->config);
         foreach ($content_files as $pathname => $file) {
             // Render file
-            $body = $twig->render($pathname, [
+            $file->setBody($twig->render($pathname, [
                 'page' => $file,
                 'site' => $payload->site
-            ]);
-            $file->setBody($body);
+            ]));
 
-            // Update file in payload
+            // Update payload pathname for file
             $new_pathname = preg_replace("#\.twig$#", '', $pathname);
             $payload->files[$new_pathname] = $file;
             unset($payload->files[$pathname]);
