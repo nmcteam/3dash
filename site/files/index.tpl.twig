@@ -5,5 +5,14 @@
     </head>
     <body>
         {% block layout %}{% endblock %}
+
+        {% if site.collections.recent_news|length %}
+        <h2>Recent News</h2>
+        <ul>
+            {% for file, pathname in site.collections.recent_news %}
+            <li><a href="{{ pathname }}">{{ file.title }}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
     </body>
 </html>
