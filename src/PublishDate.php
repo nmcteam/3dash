@@ -33,7 +33,6 @@ class PublishDate implements PluginInterface
     {
         foreach ($payload->files as $pathname => $file) {
             if (isset($file[$this->field])) {
-                $date_string = $file[$this->field];
                 $file[$this->field] = new \DateTime($file[$this->field], new \DateTimeZone($this->tz));
             }
         }
