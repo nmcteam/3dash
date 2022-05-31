@@ -4,11 +4,6 @@ namespace Nmc\Ssg;
 class App
 {
     /**
-     * @var \SplFileInfo App root directory. Contains the `files/` and `assets/` directories.
-     */
-    protected $root;
-
-    /**
      * @var object The payload passed into each plugin in sequence
      */
     protected $payload;
@@ -21,18 +16,16 @@ class App
     /**
      * Constructor
      * 
-     * @param string $root The absolute pathname to the application root directory
+     * @param string $content_path The absolute pathname to the content directory
+     * @param PluginInterface $indexer Optional. Inject custom file indexer.
      */
-    public function __construct(string $root = __DIR__) {
-        $this->root = new \SplFileInfo($root);
+    public function __construct(string $content_path = __DIR__, PluginInterface $indexer = null) {
         $this->payload = (object)[
-            'files_path' => new \SplFileInfo($this->root->getRealPath() . '/files'),
-            'assets_path' => new \SplFileInfo($this->root->getRealPath() . '/assets'),
+            'files_path' => new \SplFileInfo($content_path),
             'files' => [],
-            'assets' => [],
             'site' => []
         ];
-        $this->plugins = [new IndexFiles()];
+        $this->plugins = [$indexer ?? new Indexer()];
     }
  
     /**

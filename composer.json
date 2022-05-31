@@ -15,9 +15,11 @@
         }
     ],
     "suggest": {
-        "twig/twig": "Enables Twig templates"
+        "twig/twig": "Enables Twig templates",
+        "erusev/parsedown": "Parse content "
     },
     "require-dev": {
-        "twig/twig": "^3.0"
+        "twig/twig": "^3.0",
+        "erusev/parsedown": "^1.7"
     }
 }

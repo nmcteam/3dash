@@ -1,5 +1,7 @@
 <?php
-namespace Nmc\Ssg;
+namespace Nmc\Ssg\Plugins;
+
+use Nmc\Ssg\PluginInterface;
 
 class Drafts implements PluginInterface
 {
