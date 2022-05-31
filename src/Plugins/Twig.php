@@ -50,6 +50,11 @@ class Twig implements PluginInterface
     {
         foreach ($payload->files as $pathname => $file) {
             if ($file instanceof File) {
+                // Skip Twig if requested
+                if (isset($file['twig']) && !$file['twig']) {
+                    continue;
+                }
+                
                 // Get template
                 $template = $file['template'] ?? 'page.twig';
 
