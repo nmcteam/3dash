@@ -1,6 +1,7 @@
 <?php
 namespace Nmc\Ssg\Plugins;
 
+use Nmc\Ssg\File;
 use Nmc\Ssg\PluginInterface;
 
 class FilesystemWriter implements PluginInterface
@@ -53,7 +54,7 @@ class FilesystemWriter implements PluginInterface
 
             // Create output file
             if ($file instanceof File) {
-                if (file_put_contents($output_pathname, $file['body']) === false) {
+                if (isset($file['body']) === false || file_put_contents($output_pathname, (string)$file['body']) === false) {
                     throw new \Exception('Failed to write output file for: ' . $output_pathname);
                 }
             } else if (copy($file->getPathname(), $output_pathname) === false) {

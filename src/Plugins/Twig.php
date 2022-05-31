@@ -1,6 +1,7 @@
 <?php
 namespace Nmc\Ssg\Plugins;
 
+use Nmc\Ssg\File;
 use Nmc\Ssg\PluginInterface;
 
 class Twig implements PluginInterface
@@ -48,14 +49,16 @@ class Twig implements PluginInterface
     public function handle(object $payload)
     {
         foreach ($payload->files as $pathname => $file) {
-            // Get template
-            $template = $file['template'] ?? 'page.twig';
+            if ($file instanceof File) {
+                // Get template
+                $template = $file['template'] ?? 'page.twig';
 
-            // Render file
-            $file['body'] = $this->twig->render($template, [
-                'page' => $file,
-                'site' => $payload->site
-            ]);
+                // Render file
+                $file['body'] = $this->twig->render($template, [
+                    'page' => $file,
+                    'site' => $payload->site
+                ]);
+            }
         };
     }
 }
