@@ -233,3 +233,15 @@ plugin's `query()` method like this:
     limit: 5
 }) %}
 ```
+
+If you do NOT want a content file to be rendered with Twig, 
+add a header property to the file with name `twig` and value `false`:
+
+```
+title: "My post"
+twig: false
+
+---
+
+<p>This post will not use Twig.</p>
+```
