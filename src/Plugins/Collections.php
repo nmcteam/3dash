@@ -123,17 +123,11 @@ class Collections implements PluginInterface
                         case '>=':
                             $result = $item[$prop_name] >= $prop_value;
                             break;
-                        case 'NOT NULL':
-                            $result = is_null($item[$prop_name]) === false;
+                        case '~':
+                            $result = preg_match($prop_value, $item[$prop_name]);
                             break;
-                        case 'IS NULL':
-                            $result = is_null($item[$prop_name]);
-                            break;
-                        case 'IS EMPTY':
-                            $result = empty($item[$prop_name]);
-                            break;
-                        case 'IS NOT EMPTY':
-                            $result = empty($item[$prop_name]) === false;
+                        case '!~':
+                            $result = preg_match($prop_value, $item[$prop_name]) !== 1;
                             break;
                         default:
                             $result = $item[$prop_name] === $prop_value;
