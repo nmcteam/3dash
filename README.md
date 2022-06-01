@@ -1,10 +1,12 @@
 # NMC Static Site Generator
 
-This is a tiny static site generator. The concept is simple. There is a "payload" 
-object; its keys are pathnames, and its values are `File` instances. The payload is
-passed through a sequence of plugins. The resultant payload's keys represent corresponding
-files in the output build directory, and the payload's `File` values represent the content of
-those files.
+This is a tiny static site generator created as a weekend project. I wanted a simple
+PHP solution, similar to Metalsmith, to create a tiny personal blog.
+
+The concept is simple. There is a "payload" object; its keys are pathnames, and its values 
+are `File` instances. The payload is passed through a sequence of plugins. The resultant 
+payload's keys represent corresponding files in the output build directory, and the 
+payload's `File` values determine the content of those files.
 
 ## Payload
 
@@ -15,9 +17,9 @@ The payload is a `\stdObject` instance with these properties:
 3. `assets` - Associative array. Keys are pathnames beneath `root`, and values are `File` instances;
 4. `site` - Associative array of site metadata;
 
-The first plugin indexes all site files beneath `root`.
+The first plugin always indexes site files beneath `root`. Subsequent plugins manipulate those files.
 
-_Content_ files are parsed for header metadata and body content. They are available in the payload 
+_Content_ files are parsed for header metadata and body content. They are available in the payload's 
 `files` property. By default, files with these extensions are considered _content_ files:
 
 * html
@@ -27,8 +29,8 @@ _Content_ files are parsed for header metadata and body content. They are availa
 * xml
 * rss
 
-All other files are considered _asset_ files. They are not parsed, and they are copied verbatim to 
-the output directory. Assets are available in the payload `assets` property.
+All other files are considered _asset_ files. They are not parsed, and they are copied verbatim into 
+the output directory. Assets are available in the payload's `assets` property.
 
 ## Content files
 
@@ -51,7 +53,7 @@ into an associative array; this array's keys and values will be available on the
 
 The body can also be whatever you want. Its content is available in the corresponding `File`
 instance's `body` property. A _content_ file's `body` property is the content of the output file.
-This repo provides a `Body\Parsedown` class to support Markdown body content, parsed with Parsedown.
+This repo provides a `Body\Parsedown` class to support Markdown body content, converted with Parsedown.
 
 ## Plugins
 
