@@ -16,7 +16,7 @@
     ],
     "suggest": {
         "twig/twig": "Enables Twig templates",
-        "erusev/parsedown": "Parse content "
+        "erusev/parsedown": "Parse content"
     },
     "require-dev": {
         "twig/twig": "^3.0",

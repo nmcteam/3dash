@@ -9,7 +9,17 @@
         {% if site.collections.recent_news|length %}
         <h2>Recent News</h2>
         <ul>
-            {% for file, pathname in site.collections.recent_news %}
+            {% for pathname, file in site.collections.recent_news %}
+            <li><a href="{{ pathname }}">{{ file.title }}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% set team = site.api.query({ "pattern": "#^/team/.*#" }) %}
+        {% if team %}
+        <h2>Team</h2>
+        <ul>
+            {% for pathname, file in team %}
             <li><a href="{{ pathname }}">{{ file.title }}</a></li>
             {% endfor %}
         </ul>

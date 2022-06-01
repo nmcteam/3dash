@@ -34,6 +34,11 @@ class File extends \SplFileObject implements \ArrayAccess
         parent::__construct($pathname, 'rb');
     }
 
+    public function __toString()
+    {
+        return $this->props['body'] ?? file_get_contents($this->getPathname());
+    }
+
     public function offsetExists($offset): bool
     {
         return isset($this->props[$offset]);

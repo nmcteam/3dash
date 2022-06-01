@@ -41,6 +41,11 @@ class Collections implements PluginInterface
     protected $definitions;
 
     /**
+     * @var array Reference to app payload
+     */
+    protected $payload;
+
+    /**
      * Constructor
      * 
      * @param array $definitions
@@ -52,44 +57,111 @@ class Collections implements PluginInterface
 
     public function handle(object $payload)
     {
+        // Store reference to payload
+        $this->payload = $payload;
+
         // Init collections to empty arrays
         $payload->site['collections'] = array_fill_keys(array_keys($this->definitions), []);
 
         // Populate collections
         foreach ($this->definitions as $c_name => $c_def) {
-            // Require pattern
-            if (empty($c_def['pattern'])) {
-                throw new \Exception('Collection definition is missing a pattern: ' . $c_name);
-            }
+            $payload->site['collections'][$c_name] = $this->query($c_def);
+        }
 
-            // Collect matching files
-            foreach ($payload->files as $pathname => $file) {
-                if (preg_match($c_def['pattern'], $pathname)) {
-                    $payload->site['collections'][$c_name][] = $file;
+        // Enable arbitrary queries from subsequent plugins
+        $payload->site['api'] = $this;
+    }
+
+    public function query(array $criteria): array
+    {
+        // Initial result set
+        $hits = $this->payload->files;
+
+        // Require pattern
+        if ($criteria['pattern']) {
+            $hits = array_filter($hits, function ($k) use ($criteria) {
+                return preg_match($criteria['pattern'], $k);
+            }, \ARRAY_FILTER_USE_KEY);
+        }
+
+        // Where?
+        if ($hits && isset($criteria['where']) && is_array($criteria['where'])) {
+            foreach ($where as $prop_name => $prop_criteria) {
+                // Stop if there are no more hits to filter
+                if (!$hits) {
+                    break;
                 }
-            }
 
-            // Stop if collection is empty
-            if (empty($payload->site['collections'][$c_name])) {
-                continue;
-            }
+                // Filter hits
+                if (is_array($prop_criteria)) {
+                    // Criteria can be an array like this: ["value", "operator"]
+                    $prop_value = $prop_criteria[0];
+                    $prop_comparison = $prop_criteria[1] ?? '=';
+                } else {
+                    // Or criteria can be a simple string, in which case we do a === comparison
+                    $prop_value = $prop_criteria;
+                    $prop_comparison = '=';
+                }
+                $hits = array_filter($hits, function ($item) use ($prop_name, $prop_value, $prop_comparison) {
+                    $result = true;
+                    switch ($prop_comparison) {
+                        case '=':
+                            $result = $item[$prop_name] === $prop_value;
+                            break;
+                        case '!=':
+                            $result = $item[$prop_name] !== $prop_value;
+                            break;
+                        case '<':
+                            $result = $item[$prop_name] < $prop_value;
+                            break;
+                        case '<=':
+                            $result = $item[$prop_name] <= $prop_value;
+                            break;
+                        case '>':
+                            $result = $item[$prop_name] > $prop_value;
+                            break;
+                        case '>=':
+                            $result = $item[$prop_name] >= $prop_value;
+                            break;
+                        case 'NOT NULL':
+                            $result = is_null($item[$prop_name]) === false;
+                            break;
+                        case 'IS NULL':
+                            $result = is_null($item[$prop_name]);
+                            break;
+                        case 'IS EMPTY':
+                            $result = empty($item[$prop_name]);
+                            break;
+                        case 'IS NOT EMPTY':
+                            $result = empty($item[$prop_name]) === false;
+                            break;
+                        default:
+                            $result = $item[$prop_name] === $prop_value;
+                            break;
+                    }
 
-            // Sort?
-            if (isset($c_def['sortBy'])) {
-                uasort($payload->site['collections'][$c_name], function ($file_a, $file_b) use ($c_def) {
-                    return $file_a[$c_def['sortBy']] <=> $file_b[$c_def['sortBy']];
+                    return $result;
                 });
             }
-
-            // Reverse?
-            if (isset($c_def['reverse'])) {
-                $payload->site['collections'][$c_name] = array_reverse($payload->site['collections'][$c_name]);
-            }
-
-            // Limit?
-            if (isset($c_def['limit']) && (int)$c_def['limit'] > 0) {
-                $payload->site['collections'][$c_name] = array_slice($payload->site['collections'][$c_name], 0, $c_def['limit']);
-            }
         }
+
+        // Sort?
+        if ($hits && isset($criteria['sortBy'])) {
+            uasort($hits, function ($file_a, $file_b) use ($criteria) {
+                return $file_a[$criteria['sortBy']] <=> $file_b[$criteria['sortBy']];
+            });
+        }
+
+        // Reverse?
+        if ($hits && isset($criteria['reverse'])) {
+            $hits = array_reverse($hits);
+        }
+
+        // Limit?
+        if ($hits && isset($criteria['limit']) && (int)$criteria['limit'] > 0) {
+            $hits = array_slice($hits, 0, $criteria['limit']);
+        }
+
+        return $hits;
     }
 }
