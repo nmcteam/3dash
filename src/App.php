@@ -16,13 +16,14 @@ class App
     /**
      * Constructor
      * 
-     * @param string $content_path The absolute pathname to the content directory
+     * @param string $root_path The absolute pathname to the content directory
      * @param PluginInterface $indexer Optional. Inject custom file indexer.
      */
-    public function __construct(string $content_path = __DIR__, PluginInterface $indexer = null) {
+    public function __construct(string $root_path = __DIR__, PluginInterface $indexer = null) {
         $this->payload = (object)[
-            'files_path' => new \SplFileInfo($content_path),
+            'root' => new \SplFileInfo($root_path),
             'files' => [],
+            'assets' => [],
             'site' => []
         ];
         $this->plugins = [$indexer ?? new Indexer()];

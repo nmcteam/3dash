@@ -32,10 +32,15 @@ class FilesystemWriter implements PluginInterface
     {
         // @TODO: Clean build dir
     
-        // Write new files
-        $root_path = $payload->files_path->getRealPath();
-        foreach ($payload->files as $pathname => $file) {
+        // Combine files
+        // @TODO: Error if file name conflict? Would happen only if a 
+        // file was defined manually after initial indexing.
+        $all_files = array_merge($payload->files, $payload->assets);
+
+        // Write files
+        foreach ($all_files as $pathname => $file) {
             // Validate file path
+            $root_path = $payload->root->getRealPath();
             $file_path = $file->getRealPath();
             if (stripos($file_path, $root_path) !== 0) {
                 throw new \Exception('Found invalid file path for file: ' . $file->getPathname());
@@ -53,13 +58,15 @@ class FilesystemWriter implements PluginInterface
             }
 
             // Create output file
-            if ($file instanceof File) {
-                if (isset($file['body']) === false || file_put_contents($output_pathname, (string)$file['body']) === false) {
+            if (isset($file['body'])) {
+                if (file_put_contents($output_pathname, (string)$file['body']) === false) {
                     throw new \Exception('Failed to write output file for: ' . $output_pathname);
                 }
             } else if (copy($file->getPathname(), $output_pathname) === false) {
                 throw new \Exception('Failed to write output file for: ' . $output_pathname);
             }
+
+            // Set permissions
             if (chmod($output_pathname, $this->file_mode) === false) {
                 throw new \Exception('Failed to change file mode for: ' . $output_pathname);
             }

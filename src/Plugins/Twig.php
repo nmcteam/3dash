@@ -49,21 +49,19 @@ class Twig implements PluginInterface
     public function handle(object $payload)
     {
         foreach ($payload->files as $pathname => $file) {
-            if ($file instanceof File) {
-                // Skip Twig if requested
-                if (isset($file['twig']) && !$file['twig']) {
-                    continue;
-                }
-                
-                // Get template
-                $template = $file['template'] ?? 'page.twig';
-
-                // Render file
-                $file['body'] = $this->twig->render($template, [
-                    'page' => $file,
-                    'site' => $payload->site
-                ]);
+            // Skip Twig if requested
+            if (isset($file['twig']) && !$file['twig']) {
+                continue;
             }
+            
+            // Get template
+            $template = $file['template'] ?? 'page.twig';
+
+            // Render file
+            $file['body'] = $this->twig->render($template, [
+                'page' => $file,
+                'site' => $payload->site
+            ]);
         };
     }
 }

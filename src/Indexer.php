@@ -10,7 +10,6 @@ class Indexer implements PluginInterface
         $this->content_formats = array_merge(
             [
                 'html',
-                'htm',
                 'md',
                 'markdown',
                 'txt',
@@ -23,7 +22,7 @@ class Indexer implements PluginInterface
 
     public function handle(object $payload)
     {
-        $root_path = $payload->files_path->getRealPath();
+        $root_path = $payload->root->getRealPath();
         $directory = new \RecursiveDirectoryIterator($root_path, \FilesystemIterator::FOLLOW_SYMLINKS);
         $filter = new \RecursiveCallbackFilterIterator($directory, function ($current, $key, $iterator) {
             // Skip hidden files and directories.
@@ -82,7 +81,7 @@ class Indexer implements PluginInterface
                     ]
                 );
             } else {
-                $payload->files[$file_path_under_root] = new Asset($file_pathname);
+                $payload->assets[$file_path_under_root] = new File($file_pathname);
             }
         }
     }
