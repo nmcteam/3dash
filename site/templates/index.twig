@@ -4,6 +4,8 @@
         <title>Page Title</title>
     </head>
     <body>
+        <img src="{{ site.images.resize("/images/sunset.jpg", { width: 640, height: 480 }) }}" alt=""/>
+
         {% block layout %}{% endblock %}
 
         {% if site.collections.recent_news|length %}

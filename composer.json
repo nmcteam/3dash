@@ -16,10 +16,15 @@
     ],
     "suggest": {
         "twig/twig": "Enables Twig templates",
-        "erusev/parsedown": "Parse content"
+        "erusev/parsedown": "Parse content",
+        "intervention/image": "Used by Images plugin"
     },
     "require-dev": {
         "twig/twig": "^3.0",
-        "erusev/parsedown": "^1.7"
+        "erusev/parsedown": "^1.7",
+        "intervention/image": "^2.7"
+    },
+    "require": {
+        "guzzlehttp/psr7": "^2.2"
     }
 }

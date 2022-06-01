@@ -93,15 +93,14 @@ class Indexer implements PluginInterface
                     $header = $file_parts[0];
                     $body = $file_parts[1];
                 }
-                $payload->files[$file_path_under_root] = new File(
-                    $file_pathname,
-                    [
-                        'header' => $header,
-                        'body' => $body
-                    ]
-                );
+                $payload->files[$file_path_under_root] = File::fromString($body, [
+                    'path' => $file_path_under_root,
+                    'header' => $header
+                ]);
             } else {
-                $payload->assets[$file_path_under_root] = new File($file_pathname);
+                $payload->assets[$file_path_under_root] = File::fromPath($file_pathname, [
+                    'path' => $file_path_under_root
+                ]);
             }
         }
     }

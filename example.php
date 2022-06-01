@@ -27,6 +27,7 @@ use Nmc\Ssg\Header\Ini as Header;
 use Nmc\Ssg\Plugins\Collections;
 use Nmc\Ssg\Plugins\Drafts;
 use Nmc\Ssg\Plugins\FilesystemWriter;
+use Nmc\Ssg\Plugins\Images;
 use Nmc\Ssg\Plugins\PublishDate;
 use Nmc\Ssg\Plugins\Twig;
 
@@ -43,6 +44,7 @@ $app->add(new Collections([
         'limit' => 2
     ]
 ]));
+$app->add(new Images());
 $app->add(new Twig(__DIR__ . '/site/templates'));
 $app->add(new FilesystemWriter('./build'));
 $app->run();

@@ -21,22 +21,95 @@
 
 namespace Nmc\Ssg;
 
-class File extends \SplFileObject implements \ArrayAccess
+use GuzzleHttp\Psr7;
+use Psr\Http\Message\StreamInterface;
+
+class File implements \ArrayAccess
 {
     /**
-     * @var array
+     * @var array File metadata
      */
     protected $props;
 
-    public function __construct(string $pathname, array $props = [])
+    /**
+     * @var StreamInterface
+     */
+    protected $stream;
+
+    /**
+     * Constructor
+     * 
+     * @param StreamInterface $stream
+     * @param array $props
+     */
+    public function __construct(StreamInterface $stream, array $props = [])
     {
         $this->props = $props;
-        parent::__construct($pathname, 'rb');
+        $this->props['body'] = $stream;
     }
 
-    public function __toString()
+    public static function fromString(string $input, array $props = [])
     {
-        return $this->props['body'] ?? file_get_contents($this->getPathname());
+        return new self(Psr7\Utils::streamFor($input), $props);
+    }
+
+    public static function fromResource(resource $resource, array $props = [])
+    {
+        return new self(Psr7\Utils::streamFor($resource), $props);
+    }
+
+    public static function fromPath(string $pathname, array $props = [])
+    {
+        $handle = fopen($pathname, 'rb');
+        if ($handle === false) {
+            throw new \Exception('Could not open file: ' . $pathname);
+        }
+    
+        return new self(Psr7\Utils::streamFor($handle), $props);
+    }
+
+    /**
+     * Get props
+     * 
+     * @return array
+     */
+    public function getProps(): array
+    {
+        $new_props = $this->props;
+        unset($new_props['body']);
+
+        return $new_props;
+    }
+
+    /**
+     * Get file extension
+     * 
+     * @return string|null
+     */
+    public function getExtension(): ?string
+    {
+        return pathinfo($this['path'] ?? '', \PATHINFO_EXTENSION);
+    }
+
+    /**
+     * Set body as Psr7 stream
+     * 
+     * @param mixed $body
+     * @throws \InvalidArgumentException if the $body arg is not valid.
+     */
+    public function setBody($body)
+    {
+        $this->props['body'] = Psr7\Utils::streamFor($body);
+    }
+
+    /**
+     * Get body as Psr7 stream
+     * 
+     * @return StreamInterface|null
+     */
+    public function getBody(): ?StreamInterface
+    {
+        return $this['body'];
     }
 
     public function offsetExists($offset): bool

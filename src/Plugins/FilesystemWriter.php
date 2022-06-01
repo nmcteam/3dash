@@ -23,6 +23,7 @@ namespace Nmc\Ssg\Plugins;
 
 use Nmc\Ssg\File;
 use Nmc\Ssg\PluginInterface;
+use Psr\Http\Message\StreamInterface;
 
 class FilesystemWriter implements PluginInterface
 {
@@ -59,11 +60,9 @@ class FilesystemWriter implements PluginInterface
 
         // Write files
         foreach ($all_files as $pathname => $file) {
-            // Validate file path
-            $root_path = $payload->root->getRealPath();
-            $file_path = $file->getRealPath();
-            if (stripos($file_path, $root_path) !== 0) {
-                throw new \Exception('Found invalid file path for file: ' . $file->getPathname());
+            // Skip unless File has body
+            if ($file['body'] instanceof StreamInterface === false) {
+                continue;
             }
 
             // Create output directory
@@ -78,13 +77,15 @@ class FilesystemWriter implements PluginInterface
             }
 
             // Create output file
-            if (isset($file['body'])) {
-                if (file_put_contents($output_pathname, (string)$file['body']) === false) {
-                    throw new \Exception('Failed to write output file for: ' . $output_pathname);
-                }
-            } else if (copy($file->getPathname(), $output_pathname) === false) {
-                throw new \Exception('Failed to write output file for: ' . $output_pathname);
+            $output_handle = fopen($output_pathname, 'wb');
+            if ($output_handle === false) {
+                throw new \Exception('Failed to open output file: ' . $output_pathname);
             }
+            $file['body']->rewind();
+            while ($file['body']->eof() === false) {
+                fwrite($output_handle, $file['body']->read(4096));
+            }
+            fclose($output_handle);
 
             // Set permissions
             if (chmod($output_pathname, $this->file_mode) === false) {
