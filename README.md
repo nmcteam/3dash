@@ -99,7 +99,7 @@ Each collection's criteria accepts these keys:
 The `where` property keys are File properties, and its values
 are either strings or numeric arrays.
 
-If a string, Files are filtered such that the FIle property matching 
+If a string, Files are filtered such that the File property matching 
 the array key equals the array value.
 
 ```
@@ -111,9 +111,10 @@ the array key equals the array value.
 ```
 
 If an array, Files are filtered such that the File property matching
-the array's first value satisfies the comparison with the array's
-second value. The default comparison operator is `=`, but it may
-be overridden with the array's third value. Here are several examples:
+the array key satisfies the comparison with the array value's 
+first element. The default comparison operator is `=`, but it may
+be overridden with the value array's second element. Here are 
+several examples:
 
 Find posts not authored by Josh:
 
