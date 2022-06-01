@@ -3,10 +3,10 @@
 This is a tiny static site generator created as a weekend project. I wanted a simple
 PHP solution, similar to Metalsmith, to create a tiny personal blog.
 
-The concept is simple. There is a "payload" object; its keys are pathnames, and its values 
-are `File` instances. The payload is passed through a sequence of plugins. The resultant 
-payload's keys represent corresponding files in the output build directory, and the 
-payload's `File` values determine the content of those files.
+The concept is simple. There is a "payload" object; its `files` and `assets` properties
+are associative arrays whose keys are pathnames and whose values are `File` instances. 
+The payload is passed through a sequence of plugins. The resultant payload's `files`
+and `assets` arrays represent corresponding files in the output build directory.
 
 ## Payload
 
@@ -19,8 +19,9 @@ The payload is a `\stdObject` instance with these properties:
 
 The first plugin always indexes site files beneath `root`. Subsequent plugins manipulate those files.
 
-_Content_ files are parsed for header metadata and body content. They are available in the payload's 
-`files` property. By default, files with these extensions are considered _content_ files:
+_Content_ files are parsed for header metadata and body content. Content files are 
+available in the payload's `files` property. By default, files with these extensions 
+are considered _content_ files:
 
 * html
 * md
@@ -30,7 +31,7 @@ _Content_ files are parsed for header metadata and body content. They are availa
 * rss
 
 All other files are considered _asset_ files. They are not parsed, and they are copied verbatim into 
-the output directory. Assets are available in the payload's `assets` property.
+the output directory. Asset files are available in the payload's `assets` property.
 
 ## Content files
 
@@ -48,7 +49,7 @@ template = "page.twig"
 
 The header format can be whatever you want as long as you use a plugin that can parse it. This repo
 provides a `Header\Ini` class to support the INI header format. The header must be parseable
-into an associative array; this array's keys and values will be available on the corresponding 
+into an associative array; this array's keys and values are available on the corresponding 
 `File` instance via the `\ArrayAccess` interface.
 
 The body can also be whatever you want. Its content is available in the corresponding `File`
