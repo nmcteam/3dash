@@ -1,28 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <title>Page Title</title>
+        <meta charset="utf8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>{% if page.title %}{{ page.title }} | {% endif %}3dash Static Site Generator</title>
+        <style>
+        :root {
+            --blue: #2f8eb5;
+        }
+        body{
+            font-family: monospace;
+            font-size: 16px;
+            line-height: 24px;
+            margin: 0 auto;
+            max-width: 600px;
+        }
+        a{
+            color: var(--blue);
+        }
+        header, footer {
+            text-align: center;
+        }
+        nav{
+            padding: 0 0 24px 0;
+        }
+        .logo img{
+            width: 100px;
+        }
+        p code{
+            background: #EEE;
+            border-radius: 3px;
+            padding: 2px 4px;
+        }
+        pre{
+            border: 1px solid var(--blue);
+            border-radius: 3px;
+            padding: 20px;
+        }
+        </style>
     </head>
     <body>
-        <img src="{{ site.images.resize("/images/sunset.jpg", { format: "webp", width: 640, height: 480 }) }}" alt=""/>
+        <header>
+            <h1 title="3dash Static Site Generator for PHP"><a class="logo" href="/"><img src="/images/3dash-logo-vertical-color.svg" alt="3dash logo"/></a></h1>
+            <nav>
+                <a href="#">Home</a>
+                <a href="#">Documentation</a>
+                <a href="#">Get Started</a>
+            </nav>
+        </header>
 
-        {% block layout %}{% endblock %}
+        <main>
+            {% block layout %}{% endblock %}
+        </main>
 
-        <h2>Recent News</h2>
-        <ul>
-            {% for pathname, file in site.collections.get('recent_news') %}
-            <li><a href="{{ pathname }}">{{ file.title }}</a></li>
-            {% endfor %}
-        </ul>
-
-        {% set team = site.collections.query({ "pattern": "#^/team/.*#" }) %}
-        {% if team %}
-        <h2>Team</h2>
-        <ul>
-            {% for pathname, file in team %}
-            <li><a href="{{ pathname }}">{{ file.title }}</a></li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+        <footer>
+            <p>
+                Made with &#9829; at <a href="https://www.newmediacampaigns.com">New Media Campaigns</a>.
+            </p>
+            <p>
+                Software provided under MIT Public License.
+            </p>
+        </footer>
     </body>
 </html>

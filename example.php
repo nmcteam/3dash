@@ -38,5 +38,5 @@ $app->add(new Ssg\Plugins\Collections([
 ]));
 $app->add(new Ssg\Plugins\Images());
 $app->add(new Ssg\Plugins\Twig(__DIR__ . '/site/templates'));
-$app->add(new Ssg\Plugins\FilesystemWriter('./build'));
+$app->add(new Ssg\Plugins\FilesystemWriter('./public'));
 $app->run();
