@@ -21,22 +21,14 @@
 
 require './vendor/autoload.php';
 
-use Nmc\Ssg\App;
-use Nmc\Ssg\Body\Parsedown as Body;
-use Nmc\Ssg\Header\Ini as Header;
-use Nmc\Ssg\Plugins\Collections;
-use Nmc\Ssg\Plugins\Drafts;
-use Nmc\Ssg\Plugins\FilesystemWriter;
-use Nmc\Ssg\Plugins\Images;
-use Nmc\Ssg\Plugins\PublishDate;
-use Nmc\Ssg\Plugins\Twig;
+use Nmc\Ssg;
 
-$app = new App(__DIR__ . '/site/content');
-$app->add(new Header());
-$app->add(new Drafts());
-$app->add(new PublishDate('date'));
-$app->add(new Body());
-$app->add(new Collections([
+$app = new Ssg\App(__DIR__ . '/site/content');
+$app->add(new Ssg\Header\Ini());
+$app->add(new Ssg\Plugins\Drafts());
+$app->add(new Ssg\Plugins\PublishDate('date'));
+$app->add(new Ssg\Body\Parsedown());
+$app->add(new Ssg\Plugins\Collections([
     'recent_news' => [
         'pattern' => '#^/news/.*#',
         'sortBy' => 'date',
@@ -44,7 +36,7 @@ $app->add(new Collections([
         'limit' => 2
     ]
 ]));
-$app->add(new Images());
-$app->add(new Twig(__DIR__ . '/site/templates'));
-$app->add(new FilesystemWriter('./build'));
+$app->add(new Ssg\Plugins\Images());
+$app->add(new Ssg\Plugins\Twig(__DIR__ . '/site/templates'));
+$app->add(new Ssg\Plugins\FilesystemWriter('./build'));
 $app->run();
