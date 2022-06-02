@@ -19,6 +19,13 @@ in the output directory.
 composer require nmcteam/3dash
 ```
 
+You'll likely want these suggested packages, too, to get 
+the most out of 3dash:
+
+```
+composer require erusev/parsedown intervention/image twig/twig
+```
+
 ## Example
 
 ```
@@ -68,7 +75,7 @@ It works, but it's not officially tested. There are likely a few bugs.
 2. Why not use something like Sculpin?
 
 Indeed. Sculpin is awesome. But we wanted to scratch a personal itch
-and building something much smaller and simpler. 3dash is not intended
+and build something much smaller and simpler. 3dash is not intended
 for large complex sites. Think 1-5 page personal blog or brochure sites.
 
 3. Do you provide support?
@@ -83,7 +90,7 @@ best we can promise.
 Maybe. We haven't used PHP 8 yet. It should, though!
 Definitely works with PHP 7.4.
 
-5. I made a cool 3dash plugin. Wil you add it to the main repo?
+5. I made a cool 3dash plugin. Will you add it to the main repo?
 
 Maybe. Send us a link so we can check out your work! Worst case
 we'll happily link to your external repo.
