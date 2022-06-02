@@ -245,3 +245,38 @@ twig: false
 
 <p>This post will not use Twig.</p>
 ```
+
+### Images
+
+The Images plugin provides an image resizer method at:
+
+```
+$payload->site['images']->resize($path, $transforms);
+```
+
+This method accepts two arguments:
+
+* `path` - String. A valid asset path array key in `$payload->assets`;
+* `transforms` - Array. Image transformations.
+
+The `transforms` array may use these keys:
+
+* `width` - Integer. Required. Output image width in pixels.
+* `height` - Integer. Optional. Output image height in pixels.
+* `fit` - String. Optional. One of: `cover`, `contain`.
+* `format` - String. Optional. One of: `jpg`, `png`, `gif`, `webp`.
+* `grayscale` - Boolean. Optional. One of: `true` or `false`.
+* `quality` - Integer. Optional. Output image quality: 0-100.
+* `sharpen` - Integer. Optional. Output image sharpening: 0-100.
+
+You may create resized images at render-time in Twig templates like this:
+
+```
+{% set src = site.images.resize("/path/to/image.jpg", {
+    format: "webp",
+    width: 640,
+    height: 480,
+    fit: cover
+}) %}
+<img src="{{ src }}" alt="My image"/>
+```
