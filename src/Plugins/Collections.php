@@ -41,6 +41,11 @@ class Collections implements PluginInterface
     protected $definitions;
 
     /**
+     * @var array
+     */
+    protected $collections;
+
+    /**
      * @var array Reference to app payload
      */
     protected $payload;
@@ -61,17 +66,34 @@ class Collections implements PluginInterface
         $this->payload = $payload;
 
         // Init collections to empty arrays
-        $payload->site['collections'] = array_fill_keys(array_keys($this->definitions), []);
+        $this->collections = array_fill_keys(array_keys($this->definitions), []);
 
         // Populate collections
         foreach ($this->definitions as $c_name => $c_def) {
-            $payload->site['collections'][$c_name] = $this->query($c_def);
+            $this->collections[$c_name] = $this->query($c_def);
         }
 
         // Enable arbitrary queries from subsequent plugins
-        $payload->site['api'] = $this;
+        $payload->site['collections'] = $this;
     }
 
+    /**
+     * Get collection by name
+     * 
+     * @param string $name
+     * @return array|null
+     */
+    public function get(string $name): ?array
+    {
+        return $this->collections[$name] ?? null;
+    }
+
+    /**
+     * Query for dynamic collection
+     * 
+     * @param array $criteria
+     * @return array
+     */
     public function query(array $criteria): array
     {
         // Initial result set

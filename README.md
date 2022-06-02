@@ -94,10 +94,10 @@ $app->add(new Collections([
 ]));
 ```
 
-Each pre-populated collection is available in the `$payload->site['collections']`
-array. The `recent_news` collection above, for example, is available at 
-`$payload->site['collections']['recent_news']`; its keys are the file pathnames, 
-and its values are `File` instances.
+Each pre-populated collection is available with the `$payload->site['collections']->get()`
+method. The `recent_news` collection above, for example, is available at 
+`$payload->site['collections']->get('recent_news')`; the returned array's keys are the 
+file pathnames, and its values are `File` instances.
 
 Each collection's criteria accepts these keys:
 
@@ -152,7 +152,7 @@ The Collections plugin also exposes a method to query
 Files in subsequent plugins.
 
 ```
-$payload->site['api']->query([...]);
+$payload->site['collections']->query([...]);
 ```
 
 The `query()` method accepts the same criteria as a pre-defined
@@ -217,7 +217,7 @@ other data, it contains pre-defined collections (see above)
 that may be accessed like this:
 
 ```
-{% for pathname, file in site.collections["collection-name"] %}
+{% for pathname, file in site.collections.get("collection-name") %}
     <a href="{{ pathname }}">{{ file.title }}</a>
 {% endfor %}
 ```
@@ -226,7 +226,7 @@ You may also run queries at render-time using the Collection
 plugin's `query()` method like this:
 
 ```
-{% set files = site.api.query({
+{% set files = site.collections.query({
     where: { "author": ["Josh", "!="] },
     sortBy: "date",
     reverse: true,
