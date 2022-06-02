@@ -7,11 +7,12 @@
         <style>
         :root {
             --blue: #2f8eb5;
+            --sp: 24px;
         }
         body{
             font-family: monospace;
             font-size: 16px;
-            line-height: 24px;
+            line-height: var(--sp);
             margin: 0 auto;
             max-width: 600px;
         }
@@ -21,8 +22,10 @@
         header, footer {
             text-align: center;
         }
-        nav{
-            padding: 0 0 24px 0;
+        footer{
+            border-top: 1px solid var(--blue);
+            margin-top: var(--sp);
+            padding-top: var(--sp);
         }
         .logo img{
             width: 100px;
@@ -42,11 +45,6 @@
     <body>
         <header>
             <h1 title="3dash Static Site Generator for PHP"><a class="logo" href="/"><img src="/images/3dash-logo-vertical-color.svg" alt="3dash logo"/></a></h1>
-            <nav>
-                <a href="https://3dash.dev">Home</a>
-                <a href="https://github.com/nmcteam/3dash">Documentation</a>
-                <a href="https://github.com/nmcteam/3dash">Get Started</a>
-            </nav>
         </header>
 
         <main>

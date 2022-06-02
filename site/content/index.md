@@ -13,6 +13,14 @@ The payload object is processed by a sequence of plugins. The resultant payload
 object's `files` and `assets` properties represent corresponding files generated 
 in the output directory.
 
+## Install
+
+```
+composer require nmcteam/3dash:0.1.0
+```
+
+## Example
+
 ```
 <?php
 require './vendor/autoload.php';
@@ -37,3 +45,10 @@ $app->add(new Ssg\Plugins\Twig(__DIR__ . '/site/templates'));
 $app->add(new Ssg\Plugins\FilesystemWriter('./build'));
 $app->run();
 ```
+
+## Contribute
+
+Help us improve 3dash, and contribute on GitHub!
+
+<https://github.com/nmcteam/3dash>
+

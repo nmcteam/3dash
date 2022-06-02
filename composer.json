@@ -1,6 +1,8 @@
 {
     "name": "nmcteam/3dash",
     "description": "Static site generator",
+    "keywords": ["static", "site", "generator", "static site generator"],
+    "homepage": "https://3dash.dev",
     "type": "library",
     "license": "MIT",
     "autoload": {
@@ -11,9 +13,14 @@
     "authors": [
         {
             "name": "Josh Lockhart",
-            "email": "josh@newmediacampaigns.com"
+            "email": "josh@newmediacampaigns.com",
+            "homepage": "https://joshlockhart.com",
+            "role": "Developer"
         }
     ],
+    "support": {
+        "issues": "https://github.com/nmcteam/3dash/issues"
+    },
     "suggest": {
         "twig/twig": "Enables Twig templates",
         "erusev/parsedown": "Parse content",
@@ -25,6 +32,7 @@
         "intervention/image": "^2.7"
     },
     "require": {
+        "php": ">=7.4",
         "guzzlehttp/psr7": "^2.2"
     }
 }
