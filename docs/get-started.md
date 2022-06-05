@@ -33,16 +33,12 @@ $app = new Ssg\App(__DIR__ . '/site/content');
 
 The `Ssg\App()` constructor accepts the path to your site content files.
 
-Now you can add plugins; the order in which you add plugins is important!
+Now you can add plugins. The order in which you add plugins is important!
 Plugins are run in the order they are added.
 
-Typically, you'll add plugins to parse site files first, then add plugins
-that act on the parse file data.
-
-The final plugin is responsible for outputting files to the desired 
-location. The 3dash `FilesystemWriter` plugin generates files into
-a local filesystem output directory. However, you may choose to use
-a custom plugin to upload generated files to an S3 bucket, for example.
+Add plugins that parse site files first, then add plugins that act 
+on the parsed file data. Also, add plugins that provide tools _before_ 
+plugins that need those tools.
 
 ```
 $app->add(new Ssg\Header\Ini());
@@ -59,8 +55,20 @@ $app->add(new Ssg\Plugins\Collections([
 ]));
 $app->add(new Ssg\Plugins\Images());
 $app->add(new Ssg\Plugins\Twig(__DIR__ . '/site/templates'));
+```
+
+The final plugin is responsible for generating and outputting files to 
+the appropriate location. The 3dash `FilesystemWriter` plugin generates files 
+in a local filesystem output directory (good for local or CI/CD workflows).
+However, you may use a custom plugin instead. For example, a custom plugin may 
+generate and upload files to AWS, GitHub Pages, or CloudFlare Pages.
+
+```
 $app->add(new Ssg\Plugins\FilesystemWriter('./public'));
-$app->run();
 ```
 
 And finally, you must invoke `$app->run()` to kick things off.
+
+```
+$app->run();
+```
