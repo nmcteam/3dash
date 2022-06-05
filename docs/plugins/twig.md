@@ -32,14 +32,14 @@ template = "custom-post.twig"
 
 Every Twig template has these variables:
 
-* `page` - The current [File](../files.md) instance.
+* `page` - The current [File](../files.md#the-file-class) instance.
 * `current_url` - The current page pathname with leading `/`.
 * `site` - The [payload](../payload.md) object's `site` property.
 
-The `page` object is a [File](../files.md) instance, and therefore may be 
+The `page` Twig variable is a [File](../files.md) instance, and therefore may be 
 used as an array to access its [header properties and body content](../files.md#content-files).
 
-The `site` object contains site-wide metadata and other tools provided by 
+The `site` Twig variable contains site-wide metadata and other tools provided by 
 previous plugins. For example, if you defined custom [collections](./collections.md) 
 before adding this Twig plugin, you can access those collections in your Twig 
 templates like this:
