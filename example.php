@@ -26,7 +26,7 @@ use Nmc\Ssg;
 $app = new Ssg\App(__DIR__ . '/site/content');
 $app->add(new Ssg\Header\Ini());
 $app->add(new Ssg\Plugins\Drafts());
-$app->add(new Ssg\Plugins\PublishDate('date'));
+$app->add(new Ssg\Plugins\Dates(['date']));
 $app->add(new Ssg\Body\Parsedown());
 $app->add(new Ssg\Plugins\Collections([
     'recent_news' => [

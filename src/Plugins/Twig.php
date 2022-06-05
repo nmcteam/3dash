@@ -78,11 +78,11 @@ class Twig implements PluginInterface
             $template = $file['template'] ?? 'page.twig';
 
             // Render file
-            $file->setBody($this->twig->render($template, [
+            $file['body'] = $this->twig->render($template, [
                 'page' => $file,
                 'current_url' => $pathname,
                 'site' => $payload->site
-            ]));
+            ]);
         };
     }
 }
