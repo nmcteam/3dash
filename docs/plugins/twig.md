@@ -1,8 +1,9 @@
 # 3dash Twig Templates
 
 The Twig plugin renders [content files](../files.md#content-files) using 
-Twig templates. The Twig  plugin constructor accepts two arguments: the path 
-to the templates directory, and an optional Twig environment configuration.
+[Twig templates](https://twig.symfony.com/). The Twig  plugin constructor 
+accepts two arguments: the path to the templates directory, and an optional 
+Twig [environment configuration](https://twig.symfony.com/doc/3.x/api.html#environment-options).
 
 ```
 $app->add(new Twig(
@@ -36,7 +37,7 @@ Every Twig template has these variables:
 * `current_url` - The current page pathname with leading `/`.
 * `site` - The [payload](../payload.md) object's `site` property.
 
-The `page` Twig variable is a [File](../files.md) instance, and therefore may be 
+The `page` Twig variable is a [File](../files.md#the-file-class) instance, and therefore may be 
 used as an array to access its [header properties and body content](../files.md#content-files).
 
 The `site` Twig variable contains site-wide metadata and other tools provided by 
