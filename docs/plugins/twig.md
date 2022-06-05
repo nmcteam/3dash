@@ -1,9 +1,20 @@
 # 3dash Twig Templates
 
 The Twig plugin renders [content files](../files.md#content-files) using 
-[Twig templates](https://twig.symfony.com/). The Twig  plugin constructor 
-accepts two arguments: the path to the templates directory, and an optional 
-Twig [environment configuration](https://twig.symfony.com/doc/3.x/api.html#environment-options).
+[Twig templates](https://twig.symfony.com/).
+
+## System requirements
+
+This plugin requires the `twig/twig` package. Install it with Composer:
+
+```
+composer require twig/twig
+```
+
+## Configuration
+
+The Twig  plugin constructor accepts two arguments: the path to the 
+templates directory, and an optional Twig [environment configuration][env].
 
 ```
 $app->add(new Twig(
@@ -13,6 +24,8 @@ $app->add(new Twig(
     ]
 ));
 ```
+
+[env]: https://twig.symfony.com/doc/3.x/api.html#environment-options
 
 ## Content templates
 

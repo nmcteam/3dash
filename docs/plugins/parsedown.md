@@ -8,6 +8,14 @@ file extension.
 After this plugin runs, affected content files' `body` properties
 will be HTML instead of Markdown.
 
+## System requirements
+
+This plugin requires the `erusev/parsedown` package. Install it with Composer:
+
+```
+composer require erusev/parsedown
+```
+
 ## Use the plugin
 
 To use this plugin, add an instance of the `Parsedown` class to your
