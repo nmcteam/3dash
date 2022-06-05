@@ -25,6 +25,30 @@ that can parse them. The header and body are parsed separately, so they do not
 need to use the same format. For example, a header may use INI or YAML, and the 
 body may use Markdown, Textile, or even plain HTML.
 
+By default, 3dash considers these file extensions to be content files:
+
+* html
+* md
+* markdown
+* txt
+* xml
+* rss
+
+If you prefer to _append_ new extensions to this list, you may provide a
+custom `Indexer` instance to the 3dash app constructor like this:
+
+```
+<?php
+require './vendor/autoload.php';
+
+use Nmc\Ssg;
+
+$app = new Ssg\App(
+    __DIR__ . '/site/content',
+    new Indexer(['haml'])
+);
+```
+
 ## Asset files
 
 An _asset_ file is not parsed. It is often output verbatim into the output directory. 
