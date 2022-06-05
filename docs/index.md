@@ -12,3 +12,10 @@ The payload object is processed by a sequence of plugins. Plugins are run in the
 are added. Each plugin may manipulate the payload object. For example, a plugin may add, update, 
 or remove site files. A plugin may also provide tools intended for subsequent plugins.
 After all plugins run, the resultant payload object's files are generated in the output directory.
+
+## Table of Contents
+
+* [Get Started](./get-started.md)
+* [Payload](./payload.md)
+* [Files](./files.md)
+* [Plugins](./plugins.md)
