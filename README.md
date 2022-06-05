@@ -28,7 +28,15 @@ tools intended for subsequent plugins. The final plugin generates and outputs si
     * [Images](./docs/plugins/images.md)
     * [Twig](./docs/plugins/twig.md)
 
-## Issues
+## Vulnerability Disclosure
+
+If you find a security-related bug or vulnerabilty, please **EMAIL US** at:
+
+[security@3dash.dev](mailto:security@3dash.dev)
+
+Please **DO NOT** disclose vulnerabilities on our public issue tracker.
+
+## Issue Tracker
 
 Find a bug? Have suggestions? Open an issue here:
 
