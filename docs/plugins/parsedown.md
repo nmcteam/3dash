@@ -1,10 +1,11 @@
 # 3dash Parsedown Plugin
 
 The Parsedown plugin converts [content file](../files.md#content-files) 
-body content from Markdown into HTML. This only applies to content
-files with a `.md` or `.markdown` file extension.
+body content from Markdown into HTML using the popular [Parsedown](https://parsedown.org/)
+parser. This only applies to content files with a `.md` or `.markdown` 
+file extension.
 
-After this plugin runs, affected content files' `body` property
+After this plugin runs, affected content files' `body` properties
 will be HTML instead of Markdown.
 
 ## Use the plugin
