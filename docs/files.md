@@ -89,6 +89,6 @@ These static constructors create `File` instances from strings, PHP resources,
 and file pathnames, respectively.
 
 If you use the `set()` method or the `[] =` array assignment operator to
-set the `body` property directly, 3dash will attempt to convert your
-value to a valid StreamInterface instance using the `\GuzzleHttp\Psr7\Utils\streamFor()`
-method; an Exception will be thrown if the conversion fails.
+set the `body` property directly, 3dash will to convert your value to a 
+valid StreamInterface instance using the `\GuzzleHttp\Psr7\Utils\streamFor()`
+function; an Exception is thrown if the conversion fails.
