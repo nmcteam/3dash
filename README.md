@@ -26,6 +26,8 @@ tools intended for subsequent plugins. The final plugin generates and outputs si
     * [Drafts](./docs/plugins/drafts.md)
     * [Filesystem Writer](./docs/plugins/filesystem-writer.md)
     * [Images](./docs/plugins/images.md)
+    * [INI](./docs/plugins/ini.md)
+    * [Parsedown](./docs/plugins/parsedown.md)
     * [Twig](./docs/plugins/twig.md)
 
 ## Vulnerability Disclosure
