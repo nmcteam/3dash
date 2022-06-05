@@ -82,9 +82,8 @@ The `File` class also provides these static constructors:
 ```
 public static function fromString(string $input, array $props = []);
 public static function fromResource(resource $resource, array $props = []);
-public static function fromPath(string $pathname, array $props = [])
+public static function fromFile(string $pathname, array $props = [])
 ```
 
 These static constructors create `File` instances from strings, PHP resources,
 and file pathnames, respectively.
-

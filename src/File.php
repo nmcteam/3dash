@@ -74,7 +74,7 @@ class File implements \ArrayAccess
      * @param array $props File metadata
      * @return File
      */
-    public static function fromPath(string $pathname, array $props = [])
+    public static function fromFile(string $pathname, array $props = [])
     {
         $handle = fopen($pathname, 'rb');
         if ($handle === false) {
