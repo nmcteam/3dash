@@ -1,4 +1,4 @@
-# NMC Static Site Generator
+# 3dash Static Site Generator
 
 3dash is a tiny PHP static site generator created as a weekend project. We wanted 
 a simple PHP solution, similar to Metalsmith, to create a tiny personal blog.
@@ -21,12 +21,12 @@ tools intended for subsequent plugins. The final plugin generates and outputs si
 * [Payload](./docs/payload.md)
 * [Files](./docs/files.md)
 * [Plugins](./docs/plugins.md)
-** [Collections](./docs/plugins/collections.md)
-** [Dates](./docs/plugins/dates.md)
-** [Drafts](./docs/plugins/drafts.md)
-** [Filesystem Writer](./docs/plugins/filesystem-writer.md)
-** [Images](./docs/plugins/images.md)
-** [Twig](./docs/plugins/twig.md)
+    * [Collections](./docs/plugins/collections.md)
+    * [Dates](./docs/plugins/dates.md)
+    * [Drafts](./docs/plugins/drafts.md)
+    * [Filesystem Writer](./docs/plugins/filesystem-writer.md)
+    * [Images](./docs/plugins/images.md)
+    * [Twig](./docs/plugins/twig.md)
 
 ## Issues
 
