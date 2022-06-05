@@ -32,11 +32,6 @@ class File implements \ArrayAccess
     protected $props;
 
     /**
-     * @var StreamInterface
-     */
-    protected $stream;
-
-    /**
      * Constructor
      * 
      * @param StreamInterface $stream
@@ -48,16 +43,37 @@ class File implements \ArrayAccess
         $this->props['body'] = $stream;
     }
 
+    /**
+     * Create File for string input
+     * 
+     * @param string $input Plain string content
+     * @param array $props File metadata
+     * @return File
+     */
     public static function fromString(string $input, array $props = [])
     {
         return new self(Psr7\Utils::streamFor($input), $props);
     }
 
+    /**
+     * Create File for resource input
+     * 
+     * @param resource $input PHP resource handle
+     * @param array $props File metadata
+     * @return File
+     */
     public static function fromResource(resource $resource, array $props = [])
     {
         return new self(Psr7\Utils::streamFor($resource), $props);
     }
 
+    /**
+     * Create File for file pathname
+     * 
+     * @param string $input Pathname to readable file
+     * @param array $props File metadata
+     * @return File
+     */
     public static function fromPath(string $pathname, array $props = [])
     {
         $handle = fopen($pathname, 'rb');
@@ -68,67 +84,58 @@ class File implements \ArrayAccess
         return new self(Psr7\Utils::streamFor($handle), $props);
     }
 
-    /**
-     * Get props
-     * 
-     * @return array
-     */
-    public function getProps(): array
+    public function get(string $key): mixed
     {
-        $new_props = $this->props;
-        unset($new_props['body']);
-
-        return $new_props;
+        return $this->props[$key] ?? null;
     }
 
-    /**
-     * Get file extension
-     * 
-     * @return string|null
-     */
-    public function getExtension(): ?string
+    public function set(string $key, $value)
     {
-        return pathinfo($this['path'] ?? '', \PATHINFO_EXTENSION);
+        if ($key === 'body') {
+            $value = Psr7\Utils::streamFor($value);
+        }
+        $this->props[$key] = $value;
     }
 
-    /**
-     * Set body as Psr7 stream
-     * 
-     * @param mixed $body
-     * @throws \InvalidArgumentException if the $body arg is not valid.
-     */
-    public function setBody($body)
+    public function add(array $props)
     {
-        $this->props['body'] = Psr7\Utils::streamFor($body);
+        foreach ($props as $key => $value) {
+            $this->set($key, $value);
+        }
     }
 
-    /**
-     * Get body as Psr7 stream
-     * 
-     * @return StreamInterface|null
-     */
-    public function getBody(): ?StreamInterface
+    public function has(string $key): bool
     {
-        return $this['body'];
+        return \array_key_exists($key, $this->props);
+    }
+
+    public function remove(string $key)
+    {
+        unset($this->props[$key]);
+    }
+
+    public function all(): array
+    {
+        return $this->props;
     }
 
     public function offsetExists($offset): bool
     {
-        return isset($this->props[$offset]);
+        return $this->has($offset);
     }
 
     public function offsetGet($offset)
     {
-        return $this->props[$offset] ?? null;
+        return $this->get($offset);
     }
 
     public function offsetSet($offset, $value): void
     {
-        $this->props[$offset] = $value;
+        $this->set($offset, $value);
     }
 
     public function offsetUnset($offset): void
     {
-        unset($this->props[$offset]);
+        $this->remove($offset);
     }
 }
