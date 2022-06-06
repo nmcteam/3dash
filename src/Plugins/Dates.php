@@ -38,7 +38,8 @@ class Dates implements PluginInterface
     /**
      * Constructor
      * 
-     * @param string $tz
+     * @param array $fields Content file header property names
+     * @param string $tz A custom \DateTimeZone
      */
     public function __construct(array $fields, \DateTimeZone $tz = null)
     {

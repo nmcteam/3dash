@@ -75,9 +75,9 @@ class Images implements PluginInterface
         }
 
         // Verify asset is image
-        $extension = $file->getExtension();
+        $extension = pathinfo($path, \PATHINFO_EXTENSION);
         if (in_array($extension, ['jpg', 'jpeg', 'png', 'webp']) === false) {
-            throw new \Exception('File is not an image: ' . $file['path']);
+            throw new \Exception('File is not an image: ' . $path);
         }
 
         // Output format
@@ -92,8 +92,8 @@ class Images implements PluginInterface
         // Determine resized image path
         ksort($transforms);
         $hash = md5(json_encode($transforms));
-        $path = pathinfo($file['path'], \PATHINFO_DIRNAME);
-        $basename = pathinfo($file['path'], \PATHINFO_FILENAME);
+        $path = pathinfo($path, \PATHINFO_DIRNAME);
+        $basename = pathinfo($path, \PATHINFO_FILENAME);
         $new_pathname = sprintf(
             '%s/%s-%s.%s',
             $path,
@@ -114,7 +114,7 @@ class Images implements PluginInterface
 
         // Resize
         $fit = $transforms['fit'] ?? 'cover';
-        $image = $this->manager->make((string)$file->getBody());
+        $image = $this->manager->make((string)$file['body']);
         if ($transforms['width'] && $transforms['height']) {
             if ($fit === 'cover') {
                 $image->fit($transforms['width'], $transforms['height']);
@@ -152,9 +152,7 @@ class Images implements PluginInterface
         }
 
         // Add resized image file to payload assets
-        $this->payload->assets[$new_pathname] = File::fromString((string)$image->encode($format, $quality), [
-            'path' => $new_pathname
-        ]);
+        $this->payload->assets[$new_pathname] = File::fromString((string)$image->encode($format, $quality));
 
         return $new_pathname;
     }

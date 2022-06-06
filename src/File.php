@@ -62,7 +62,7 @@ class File implements \ArrayAccess
      * @param array $props File metadata
      * @return File
      */
-    public static function fromResource(resource $resource, array $props = [])
+    public static function fromResource(\resource $resource, array $props = [])
     {
         return new self(Psr7\Utils::streamFor($resource), $props);
     }
