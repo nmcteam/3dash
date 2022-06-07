@@ -84,7 +84,7 @@ class File implements \ArrayAccess
         return new self(Psr7\Utils::streamFor($handle), $props);
     }
 
-    public function get(string $key): mixed
+    public function get(string $key)
     {
         return $this->props[$key] ?? null;
     }
