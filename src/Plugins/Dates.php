@@ -23,27 +23,28 @@ namespace Nmc\Ssg\Plugins;
 
 use Nmc\Ssg\PluginInterface;
 
-class PublishDate implements PluginInterface
+class Dates implements PluginInterface
 {
     /**
-     * @var string The date field name
+     * @var array Header property names to be converted into \DateTime instances
      */
-    protected $field;
+    protected $fields;
 
     /**
-     * @var string Time zone string
+     * @var \DateTimeZone Time zone
      */
     protected $tz;
 
     /**
      * Constructor
      * 
-     * @param string $tz
+     * @param array $fields Content file header property names
+     * @param string $tz A custom \DateTimeZone
      */
-    public function __construct(string $field, string $tz = null)
+    public function __construct(array $fields, \DateTimeZone $tz = null)
     {
-        $this->field = $field;
-        $this->tz = $tz ?? date_default_timezone_get();
+        $this->fields = $fields;
+        $this->tz = $tz ?? new \DateTimeZone(date_default_timezone_get());
     }
 
     /**
@@ -54,8 +55,16 @@ class PublishDate implements PluginInterface
     public function handle(object $payload)
     {
         foreach ($payload->files as $pathname => $file) {
-            if (isset($file[$this->field])) {
-                $file[$this->field] = new \DateTime($file[$this->field], new \DateTimeZone($this->tz));
+            foreach ($this->fields as $field) {
+                if ($file->has($field)) {
+                    $file->set(
+                        $field,
+                        new \DateTime(
+                            $file->get($field),
+                            $this->tz
+                        )
+                    );
+                }
             }
         }
     }

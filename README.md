@@ -1,282 +1,57 @@
-# NMC Static Site Generator
+# 3dash Static Site Generator
 
-This is a tiny static site generator created as a weekend project. I wanted a simple
-PHP solution, similar to Metalsmith, to create a tiny personal blog.
+3dash is a tiny PHP static site generator created as a weekend project. We wanted 
+a simple PHP solution, similar to Metalsmith, to create a tiny personal blog.
 
-The concept is simple. There is a "payload" object with several properties, including
-`files` and `assets`. These properties are associative arrays whose keys are pathnames 
-and whose values are `File` instances.
+Here's the gist: there is a [payload object](./docs/payload.md) that manages your 
+site [content](./docs/files.md#content-files) and [asset](./docs/files.md#asset-files)
+files. The payload object's properties are associative arrays. The array keys are 
+pathnames of generated site files (e.g. "/about/josh.html"), and the array values are 
+[File](./docs/files.md#the-file-class) instances that determine the content of 
+generated site files.
 
-The payload object is processed by a sequence of plugins. The resultant payload
-object's `files` and `assets` properties represent corresponding files generated 
-in the output directory.
+The payload object is processed by a sequence of [plugins](./docs/plugins.md). Plugins 
+are run in the order they are added. Each plugin may manipulate the payload object. 
+For example, a plugin may add, update, or remove site files. A plugin may also provide 
+tools intended for subsequent plugins. The final plugin generates and outputs site files.
 
-## Payload
+## Documentation
 
-The payload is a `\stdObject` instance with these properties:
+* [Get Started](./docs/get-started.md)
+* [Payload](./docs/payload.md)
+* [Files](./docs/files.md)
+* [Plugins](./docs/plugins.md)
+    * [Collections](./docs/plugins/collections.md)
+    * [Dates](./docs/plugins/dates.md)
+    * [Drafts](./docs/plugins/drafts.md)
+    * [Filesystem Writer](./docs/plugins/filesystem-writer.md)
+    * [Images](./docs/plugins/images.md)
+    * [INI](./docs/plugins/ini.md)
+    * [Parsedown](./docs/plugins/parsedown.md)
+    * [Twig](./docs/plugins/twig.md)
 
-1. `root` - A `\SplFileInfo` object for the directory containing site files;
-2. `files` - Associative array. Keys are pathnames (with leading `/`) beneath `root`, and values are `File` instances;
-3. `assets` - Associative array. Keys are pathnames (with leading `/`) beneath `root`, and values are `File` instances;
-4. `site` - Associative array of site metadata;
+## Vulnerability Disclosure
 
-The first plugin always indexes files beneath `root`. Subsequent plugins manipulate those files.
-There are two types of site files: _content_ files and _asset_ files.
+If you find a security-related bug or vulnerabilty, please **EMAIL US** at:
 
-_Content_ files are parsed for header properties and body content. Content files are 
-available in the payload's `files` property. By default, files with these extensions 
-are considered _content_ files:
+[security@3dash.dev](mailto:security@3dash.dev)
 
-* html
-* md
-* markdown
-* txt
-* xml
-* rss
+Please **DO NOT** disclose vulnerabilities on our public issue tracker.
 
-All other files are considered _asset_ files. They are not parsed, and they are copied 
-verbatim into the output directory. Asset files are available in the payload's `assets` property.
-
-## Content files
+## Issue Tracker
 
-A _content_ file has two parts: a header and a body. These two parts are separated by `---` (three dashes).
+Find a bug? Have suggestions? Open an issue here:
 
-```
-title = "Page title"
-date = "2022-05-29"
-template = "page.twig"
-
----
-
-<p>This is the page body</p>
-```
-
-The header format can be whatever you want as long as you use a plugin that can parse it. This repo
-provides a `Header\Ini` class to parse INI-formatted headers. The header must be parseable
-into an associative array; this array's keys and values become available on the corresponding 
-`File` instance via `\ArrayAccess` interface.
-
-The body can also be whatever you want. Its content is available in the corresponding `File`
-instance's `body` array key. A _content_ file's `body` is the content of the output file.
-This repo provides a `Body\Parsedown` class to parse Markdown body content, converted with Parsedown.
-
-The example content file above can be used like this:
+<https://github.com/nmcteam/3dash/issues>
 
-```
-echo $file['title'];
-echo $file['date];
-echo $file['body'];
-```
+## Contribute
 
-## Plugins
+Help us improve 3dash. Contribute on [GitHub](https://github.com/nmcteam/3dash)!
 
-A plugin is any class instance that implements the `PluginInterface` interface:
-
-```
-public function handle(object $payload);
-```
+## License
 
-### Collections
+3dash is released under the [MIT Public License](./LICENSE).
 
-The collections plugin lets you pre-define groups of files
-that meet specific criteria. The `Collections` constructor
-accepts an associative array. Array keys are collection IDs,
-and array values are the collection criteria.
+## Authors
 
-```
-$app->add(new Collections([
-    'recent_news' => [
-        'pattern' => '#^/news/.*#',
-        'sortBy' => 'date',
-        'reverse' => true,
-        'limit' => 2
-    ]
-]));
-```
-
-Each pre-populated collection is available with the `$payload->site['collections']->get()`
-method. The `recent_news` collection above, for example, is available at 
-`$payload->site['collections']->get('recent_news')`; the returned array's keys are the 
-file pathnames, and its values are `File` instances.
-
-Each collection's criteria accepts these keys:
-
-* `pattern`: string. A regular expression to match file pathnames, passed verbatim to `preg_match()`;
-* `sortBy`: string. A file property to sort by;
-* `reverse`: boolean. Reverse the direction of sorted Files;
-* `limit`: integer. Limit the number of Files;
-* `where`: array. Filter files with criteria;
-
-The `where` property is an associative array. Its keys are File property names,
-and its values are either strings or numeric arrays.
-
-If a string, Files are filtered such that the File property matching 
-the array key equals the array string value.
-
-```
-[
-    'where' => [
-        'title' => 'My title'
-    ]
-]
-```
-
-If an array, Files are filtered such that the File property matching
-the array key satisfies the comparison with the value's 
-first element. The default comparison operator is `=`, but it may
-be overridden with the value's optional second element. Here are 
-several examples:
-
-Find posts not authored by Josh:
-
-```
-[
-    'where' => [
-        'author' => ['Josh', '!=']
-    ]
-]
-```
-
-Possible operators are:
-
-* `=` - Equals
-* `!=` - Not equals
-* `>` - Greater than
-* `>=` - Greater than or equal to
-* `<` - Less than
-* `<=` - Less than or equal to
-* `~` - Matches (value must be a valid PHP regular expression with delimiters)
-* `!~` - Does not match (value must be a valid PHP regular expression with delimiters)
-
-The Collections plugin also exposes a method to query
-Files in subsequent plugins.
-
-```
-$payload->site['collections']->query([...]);
-```
-
-The `query()` method accepts the same criteria as a pre-defined
-collection and returns an associative array; its keys are
-pathnames and its values are `File` instances.
-
-### Drafts
-
-Use the Drafts plugin to omit Files from output.
-A content file is considered a draft if its header
-contains a `draft` property with a truthy value.
-
-### Publish Date
-
-Use the Publish Date plugin to convert a header
-property value into a `\DateTime` object
-for use in subsequent plugins. It is assumed the
-original header property value is a valid date/time
-string that can be parsed by PHP.
-
-### Twig
-
-Use the Twig plugin to render content files using
-Twig templates. The Twig plugin constructor
-accepts two arguments: the path to the templates
-directory, and an optional Twig environment configuration.
-
-```
-$app->add(new Twig(
-    './path/to/templates/`,
-    [
-        'cache' => false
-    ]
-));
-```
-
-The default template is `page.twig`. You can choose a different
-template for each content file by entering the Twig template
-name in the file header's `template` property.
-
-```
-title = "My post"
-template = "custom-post.twig"
-
----
-
-<p>Post content goes here.</p>
-```
-
-Every Twig template has these variables:
-
-* `page` - The current `File` being rendered;
-* `current_url` - The current page URL;
-* `site` - The `$payload->site` object;
-
-The `page` object is a `File` instance, and therefore
-it can be used as an array to access header
-properties and the body content.
-
-The `site` object contains site-wide metadata. Among
-other data, it contains pre-defined collections (see above)
-that may be accessed like this:
-
-```
-{% for pathname, file in site.collections.get("collection-name") %}
-    <a href="{{ pathname }}">{{ file.title }}</a>
-{% endfor %}
-```
-
-You may also run queries at render-time using the Collection
-plugin's `query()` method like this:
-
-```
-{% set files = site.collections.query({
-    where: { "author": ["Josh", "!="] },
-    sortBy: "date",
-    reverse: true,
-    limit: 5
-}) %}
-```
-
-If you do NOT want a content file to be rendered with Twig, 
-add a header property to the file with name `twig` and value `false`:
-
-```
-title: "My post"
-twig: false
-
----
-
-<p>This post will not use Twig.</p>
-```
-
-### Images
-
-The Images plugin provides an image resizer method at:
-
-```
-$payload->site['images']->resize($path, $transforms);
-```
-
-This method accepts two arguments:
-
-* `path` - String. A valid asset path array key in `$payload->assets`;
-* `transforms` - Array. Image transformations.
-
-The `transforms` array may use these keys:
-
-* `width` - Integer. Required. Output image width in pixels.
-* `height` - Integer. Optional. Output image height in pixels.
-* `fit` - String. Optional. One of: `cover`, `contain`.
-* `format` - String. Optional. One of: `jpg`, `png`, `gif`, `webp`.
-* `grayscale` - Boolean. Optional. One of: `true` or `false`.
-* `quality` - Integer. Optional. Output image quality: 0-100.
-* `sharpen` - Integer. Optional. Output image sharpening: 0-100.
-
-You may create resized images at render-time in Twig templates like this:
-
-```
-{% set src = site.images.resize("/path/to/image.jpg", {
-    format: "webp",
-    width: 640,
-    height: 480,
-    fit: cover
-}) %}
-<img src="{{ src }}" alt="My image"/>
-```
+3dash is created and maintained by [New Media Campaigns](https://www.newmediacampaigns.com).

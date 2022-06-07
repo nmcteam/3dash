@@ -34,7 +34,7 @@ class Parsedown implements PluginInterface
         $parsedown = new \Parsedown();
         foreach ($payload->files as $pathname => $file) {
             if (preg_match("#\.(md|markdown)$#", $pathname)) {
-                $file->setBody($parsedown->text((string)$file->getBody()));
+                $file['body'] = $parsedown->text((string)$file['body']);
                 $new_pathname = preg_replace("#\.(md|markdown)$#", ".html", $pathname);
                 $payload->files[$new_pathname] = $file;
                 unset($payload->files[$pathname]);
