@@ -1,0 +1,38 @@
+:root {
+    --blue: #2f8eb5;
+    --sp: 24px;
+}
+body{
+    font-family: monospace;
+    font-size: 16px;
+    line-height: var(--sp);
+    margin: 0 auto;
+    padding: 0 var(--sp);
+    max-width: 600px;
+}
+a{
+    color: var(--blue);
+}
+header, footer {
+    text-align: center;
+}
+footer{
+    border-top: 1px solid var(--blue);
+    margin-top: var(--sp);
+    padding-top: var(--sp);
+}
+.logo img{
+    width: 100px;
+}
+p code{
+    background: #EEE;
+    border-radius: 3px;
+    padding: 2px 4px;
+}
+pre{
+    border: 1px solid var(--blue);
+    border-radius: 3px;
+    max-width: 100%;
+    overflow: auto;
+    padding: 20px;
+}
